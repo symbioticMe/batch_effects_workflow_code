@@ -33,5 +33,5 @@ dilution_groups_df = dilution_groups_df %>%
 spike_ins_in_samples = sample_annotation_InterLab %>%
   merge(dilution_groups_df, by = 'dilution_series', all = T)
 
-write_csv(spike_ins_in_samples,'data_InterLab/2_interim_data_InterLab/spike_ins_in_samples.csv')
+write_csv(spike_ins_in_samples,'data_InterLab/2_interim_data/spike_ins_in_samples.csv')
 
