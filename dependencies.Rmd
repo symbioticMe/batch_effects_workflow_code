@@ -1,0 +1,20 @@
+---
+title: "dependencies"
+author: "Jelena Chuklina"
+date: "1/30/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Dependencies in the project:
+
+```{r cars}
+install.packages(c('dplyr','readr','tidyverse','reshape2','aLFQ'))
+```
+
+
+#Bioconductor packages:
+1. proBatch
