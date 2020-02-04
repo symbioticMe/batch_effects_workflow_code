@@ -1,7 +1,7 @@
 library(MSstats)
 library(readr)
 library(dplyr)
-library(proBatch)
+library(proBatch3.4)
 
 #load the data
 raw_transitome_unlogged = read_csv('data_PanCancer/2_interim_data/raw_transitome_PanCancer.csv')

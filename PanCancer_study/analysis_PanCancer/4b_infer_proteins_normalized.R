@@ -1,7 +1,7 @@
 library(MSstats)
 library(readr)
 library(dplyr)
-library(proBatch)
+library(proBatch3.4)
 
 normalized_transitome_PanCancer = read_csv('data_PanCancer/2_interim_data/normalized_transitome_PanCancer.csv')
 
