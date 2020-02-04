@@ -2,7 +2,7 @@ library(readr)
 library(dplyr)
 library(proBatch)
 
-raw_transitome_PanCancer = read_csv('PanCancer_study/data_PanCancer/1_original_data/feature_alignment_modB_trs.csv')
+raw_transitome_PanCancer = read_csv('data_PanCancer/1_original_data/feature_alignment_modB_trs.csv')
 
 
 raw_transitome_PanCancer[raw_transitome_PanCancer$Intensity %in% 0,"Intensity"]<-NA
@@ -15,4 +15,4 @@ raw_transitome_PanCancer = raw_transitome_PanCancer %>%
 #                                          log_base = 2, offset = 1)
 
 write_csv(raw_transitome_PanCancer,
-          'PanCancer_study/data_PanCancer/2_interim_data/raw_transitome_PanCancer.csv')
+          'data_PanCancer/2_interim_data/raw_transitome_PanCancer.csv')
