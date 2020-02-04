@@ -1,3 +1,5 @@
+library(tidyr)
+
 transition_to_fragment <- function(proteome_long, 
                                   fragment_annotation_column = 'aggr_Fragment_Annotation',
                                   fragment_intensity_column = 'aggr_Peak_Area'){
