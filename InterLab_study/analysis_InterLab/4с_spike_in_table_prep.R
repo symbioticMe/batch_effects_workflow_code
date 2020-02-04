@@ -17,7 +17,7 @@ spike_in_group_df  = read_csv('data_InterLab/1_original_data/spike_in_group.csv'
 spike_in_group_df$Sequence = gsub('\\[\\+(10|08)\\]', '', spike_in_group_df$Peptide)
 
 #load the list of spike-in peptide dilution series (is it also one of the supplementary tables?)
-dilution_groups_df = read_csv('data_Interlab/1_original_data/group_to_dilutionSeries.csv')
+dilution_groups_df = read_csv('data_InterLab/1_original_data/group_to_dilutionSeries.csv')
 
 #load the list of dilution series to groups mapped (MOESM3)
 ##TOREMOVE:
@@ -33,5 +33,5 @@ dilution_groups_df = dilution_groups_df %>%
 spike_ins_in_samples = sample_annotation_InterLab %>%
   merge(dilution_groups_df, by = 'dilution_series', all = T)
 
-write_csv(spike_ins_in_samples,'data_Interlab/2_interim_data_InterLab/spike_ins_in_samples.csv')
+write_csv(spike_ins_in_samples,'data_InterLab/2_interim_data_InterLab/spike_ins_in_samples.csv')
 

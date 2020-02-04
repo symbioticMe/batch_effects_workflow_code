@@ -12,7 +12,7 @@ cols_to_get <- rep(list(col_guess()), length(essential_columns))
 names(cols_to_get) <- essential_columns
 cols_to_get2 = do.call(cols_only, cols_to_get)
 
-proteome = read_delim("data_Interlab/1_original_data/all_sites_global_q_0.01_applied_to_local_global.txt", 
+proteome = read_delim("data_InterLab/1_original_data/all_sites_global_q_0.01_applied_to_local_global.txt", 
                       delim =  "\t", escape_double = FALSE, trim_ws = TRUE, 
                       col_types = cols_to_get2)
 
@@ -32,5 +32,5 @@ fragmentome_centered_un_log = fragmentome_centered %>%
 
 #save new data frame
 write_delim(fragmentome_centered_un_log, 
-            path = "data_Interlab/2_interim_data/all_sites_global_q_001_applied_to_local_global_medianCentered.tsv",
+            path = "data_InterLab/2_interim_data/all_sites_global_q_001_applied_to_local_global_medianCentered.tsv",
             delim = '\t')

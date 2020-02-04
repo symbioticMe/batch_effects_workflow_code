@@ -5,7 +5,7 @@ library(readr)
 library(aLFQ)
 
 #load the data
-data.normalized <- import(ms_filenames=  "data_Interlab/2_interim_data/all_sites_global_q_001_applied_to_local_global_medianCentered.tsv",
+data.normalized <- import(ms_filenames=  "data_InterLab/2_interim_data/all_sites_global_q_001_applied_to_local_global_medianCentered.tsv",
                           ms_filetype = "openswath", concentration_filename=NA,
                           averageruns=FALSE, sumruns=FALSE, mprophet_cutoff=0.01, 
                           openswath_superimpose_identifications=FALSE, 
@@ -20,4 +20,4 @@ peptides.median <- PeptideInference(data.normalized, transition_topx = 5,
                                     consensus_transitions = FALSE)
 
 #save the data frame (LONG or WIDE format? What are the column names?)
-write_csv(peptides.median, path = 'data_Interlab/2_interim_data/peptide_df_medianCentered.csv')
+write_csv(peptides.median, path = 'data_InterLab/2_interim_data/peptide_df_medianCentered.csv')

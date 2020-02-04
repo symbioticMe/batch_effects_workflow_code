@@ -5,17 +5,17 @@ library(proBatch)
 library(tidyverse)
 library(reshape2)
 
-spike_ins_in_samples = read_csv('data_Interlab/2_interim_data_InterLab/spike_ins_in_samples.csv')
+spike_ins_in_samples = read_csv('data_InterLab/2_interim_data_InterLab/spike_ins_in_samples.csv')
 
 #load the data raw (non-normalized) peptide data
-peptide_df_raw = read_csv("data_Interlab/2_interim_data/peptide_df_raw.csv") 
+peptide_df_raw = read_csv("data_InterLab/2_interim_data/peptide_df_raw.csv") 
 spike_in_quantities_raw = peptide_df_raw %>%
   filter(grepl('AQUA', protein_id)) %>%
   mutate(Step = 'Raw',
          filename_new =  gsub('\\.mzXML\\.gz','', run_id)) 
 
 #load the data normalized (median centered) peptide data
-peptide_df_medianCentered = read_csv("data_Interlab/2_interim_data/peptide_df_medianCentered.csv") 
+peptide_df_medianCentered = read_csv("data_InterLab/2_interim_data/peptide_df_medianCentered.csv") 
 spike_in_quantities_normalized = peptide_df_medianCentered %>%
   filter(grepl('AQUA', protein_id))%>%
   mutate(Step = 'Normalized',
@@ -39,4 +39,4 @@ spike_in_quantities = spike_in_quantities %>%
   group_by(peptide_id, concentration, site, Step, peptide_sequence) %>% 
   summarize(Intensity = mean(Intensity))
 
-write_csv(spike_in_quantities,'data_Interlab/3_data_for_plots/spike_in_quantities.csv')
+write_csv(spike_in_quantities,'data_InterLab/3_data_for_plots/spike_in_quantities.csv')

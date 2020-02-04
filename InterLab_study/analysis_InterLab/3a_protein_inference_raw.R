@@ -19,4 +19,4 @@ prots <- ProteinInference(data.raw, peptide_method = "top", peptide_topx = 3,
                           consensus_transitions = FALSE)
 
 #save the data frame (LONG or WIDE format? What are the column names?)
-write_csv(prots, path = 'data_Interlab/3_final_data_InterLab/protein_df_raw.csv')
+write_csv(prots, path = 'data_InterLab/3_data_for_plots/protein_df_raw.csv')

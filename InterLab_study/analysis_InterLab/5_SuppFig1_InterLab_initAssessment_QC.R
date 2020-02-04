@@ -3,8 +3,8 @@ library(proBatch)
 library(dplyr)
 library(ggpubr)
 
-protein_df_raw <- read_csv("data_Interlab/3_final_data_InterLab/protein_df_raw.csv")
-sample_annotation_InterLab <- read_csv("data_Interlab/3_final_data_InterLab/sample_annotation_InterLab.csv")
+protein_df_raw <- read_csv("data_InterLab/3_final_data_InterLab/protein_df_raw.csv")
+sample_annotation_InterLab <- read_csv("data_InterLab/3_final_data_InterLab/sample_annotation_InterLab.csv")
 
 protein_df_raw = log_transform_df(protein_df_raw, log_base = 10, measure_col = 'response')
 protein_df_raw = protein_df_raw%>% 
@@ -26,7 +26,7 @@ sample_corr_heatmap = plot_sample_corr_heatmap(raw_proteome_matrix,
                                                show_colnames = F, show_rownames = F,
                                                annotation_legend = F)
 
-protein_df_medianCentered <- read_csv("data_Interlab/2_interim_data_InterLab/protein_df_medianCentered.csv")
+protein_df_medianCentered <- read_csv("data_InterLab/2_interim_data_InterLab/protein_df_medianCentered.csv")
 protein_df_medianCentered = log_transform_df(protein_df_medianCentered, log_base = 10, measure_col = 'response')
 protein_df_medianCentered = protein_df_medianCentered %>% 
   mutate(filename_new = gsub('\\.mzXML\\.gz', '', run_id))
@@ -76,7 +76,7 @@ boxplot_proteins_raw = plot_boxplot(df_long = protein_df_raw,
 
 
 #===== Plot the selected spike-in peptides before and after normalization ====
-spike_in_quantities = read_csv('data_Interlab/3_data_for_plots/spike_in_quantities.csv')
+spike_in_quantities = read_csv('data_InterLab/3_data_for_plots/spike_in_quantities.csv')
 
 selected_spikeIns = c('APAELEVECATQLR','SGGLLQLWK')
 gg_spike_ins = ggplot(spike_in_quantities %>% filter(peptide_sequence %in% selected_spikeIns), 
