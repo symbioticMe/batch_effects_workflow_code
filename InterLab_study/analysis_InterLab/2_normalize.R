@@ -20,11 +20,11 @@ proteome = read_delim("data_InterLab/1_original_data/all_sites_global_q_0.01_app
 #transform transition-level matrix to fragment-level
 fragmentome <- proteome %>% 
   transition_to_fragment()
-fragmentome = fragmentome %>%
+fragmentome_log = fragmentome %>%
   log_transform_df(measure_col = 'Ion_intensity')
 
 #normalize the samples
-fragmentome_centered = normalize_sample_medians_df(fragmentome, 
+fragmentome_centered = normalize_sample_medians_df(fragmentome_log, 
                                                 sample_id_col = 'filename',
                                                 measure_col = 'Ion_intensity')
 #exponentiate (reverse log-transformation)
@@ -41,8 +41,8 @@ proteome_median_centered = fragment_df_to_openSWATH(fragmentome_centered_un_log,
                                                     fragment_united_column = 'aggr_Fragment_Annotation_new',
                                                     fragment_united_int_column = 'aggr_Peak_Area_new',
                                                     un_log = NULL, 
-                                                    intensities_to_exclude = c('Ion_intensity_log2', 'Ion_intensity', 'Intensity_normalized',
-                                                                               'diff','median_global','median_run'))
+                                                    intensities_to_exclude = setdiff(names(fragmentome_centered_un_log), 
+                                                                                     names(fragmentome)))
 old_names <- c("aggr_Peak_Area", "aggr_Fragment_Annotation", 
                "aggr_Peak_Area_new", "aggr_Fragment_Annotation_new")
 new_names <-  c("aggr_Peak_Area_old", "aggr_Fragment_Annotation_old", 
