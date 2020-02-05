@@ -32,9 +32,9 @@ fragmentome_centered_un_log = fragmentome_centered %>%
   unlog_df(measure_col = 'Ion_intensity')
 
 
+
+
 proteome_median_centered = fragment_df_to_openSWATH(fragmentome_centered_un_log, 
-                                                    sample_id_col = 'filename',
-                                                    peptide_id_col = c('peptide_group_label', 'aggr_Peak_Area', 'aggr_Fragment_Annotation'),
                                                     fragment_intensity_column = 'Ion_intensity', 
                                                     fragment_annotation_column = 'Ion_ID',
                                                     id_column = 'ions',

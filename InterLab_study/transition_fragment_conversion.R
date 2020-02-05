@@ -53,6 +53,6 @@ fragment_df_to_openSWATH <- function(transitome,
                                                      transitome_united[[fragment_united_column]])
   
   transitome_united[[fragment_united_int_column]] = gsub('(;NA)?','', 
-                                                     transitome_united[[fragment_united_int_columnhel]])
+                                                     transitome_united[[fragment_united_int_column]])
   return(transitome_united)
 }
