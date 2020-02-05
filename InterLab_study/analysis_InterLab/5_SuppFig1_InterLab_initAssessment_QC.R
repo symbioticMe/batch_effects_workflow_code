@@ -3,8 +3,8 @@ library(proBatch3.4)
 library(dplyr)
 library(ggpubr)
 
-protein_df_raw <- read_csv("data_InterLab/3_final_data_InterLab/protein_df_raw.csv")
-sample_annotation_InterLab <- read_csv("data_InterLab/3_final_data_InterLab/sample_annotation_InterLab.csv")
+protein_df_raw <- read_csv("data_InterLab/3_data_for_plots/protein_df_raw.csv")
+sample_annotation_InterLab <- read_csv("data_InterLab/3_data_for_plots/sample_annotation_InterLab.csv")
 
 protein_df_raw = log_transform_df(protein_df_raw, log_base = 10, measure_col = 'response')
 protein_df_raw = protein_df_raw%>% 
