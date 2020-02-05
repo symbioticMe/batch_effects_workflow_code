@@ -2,6 +2,7 @@ library(readr)
 library(proBatch3.4)
 library(dplyr)
 library(ggpubr)
+library(ggthemes)
 
 protein_df_raw <- read_csv("data_InterLab/3_data_for_plots/protein_df_raw.csv")
 sample_annotation_InterLab <- read_csv("data_InterLab/3_data_for_plots/sample_annotation_InterLab.csv")
@@ -27,6 +28,7 @@ sample_corr_heatmap = plot_sample_corr_heatmap(raw_proteome_matrix,
                                                sample_annotation = sample_annotation_InterLab, 
                                                sample_id_col = 'filename_new', 
                                                factors_to_plot = 'site', 
+                                               color_list = colors_for_sites,
                                                plot_title = 'Sample correlation (raw data)',
                                                show_colnames = F, show_rownames = F,
                                                annotation_legend = F)
