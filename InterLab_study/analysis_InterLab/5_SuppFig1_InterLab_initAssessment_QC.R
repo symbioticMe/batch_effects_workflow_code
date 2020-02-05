@@ -108,7 +108,17 @@ gg_spike_ins = ggplot(spike_in_quantities %>% filter(peptide_sequence %in% selec
 protein_df_raw$Step = 'Raw'
 protein_df_medianCentered$Step = 'Normalized'
 summary_proteome = rbind(protein_df_raw, protein_df_medianCentered)
-summary_proteome = summary_proteome  %>% filter(protein_id %in% solid_proteins) %>% group_by(Step, protein_id) %>% 
+
+#filter proteins present in at least 
+n_files= length(unique(protein_df_raw$filename))
+solid_proteins = protein_df_raw %>%
+  group_by(protein_id) %>%
+  summarize(frac_present = n()/n_files) %>%
+  filter(frac_present >= .8) %>%
+  pull(protein_id)
+summary_proteome = summary_proteome  %>% 
+  filter(protein_id %in% solid_proteins) %>% 
+  group_by(Step, protein_id) %>% 
   summarize(CV = 100*sd(beforeLog_response, na.rm = T)/mean(beforeLog_response, na.rm = T), 
             mean = mean(beforeLog_response, na.rm = T))
 max_intensity = max(protein_df_medianCentered$response, protein_df_raw$response)
