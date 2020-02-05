@@ -26,7 +26,7 @@ sample_corr_heatmap = plot_sample_corr_heatmap(raw_proteome_matrix,
                                                show_colnames = F, show_rownames = F,
                                                annotation_legend = F)
 
-protein_df_medianCentered <- read_csv("data_InterLab/2_interim_data_InterLab/protein_df_medianCentered.csv")
+protein_df_medianCentered <- read_csv("data_InterLab/3_data_for_plots/protein_df_medianCentered.csv")
 protein_df_medianCentered = log_transform_df(protein_df_medianCentered, log_base = 10, measure_col = 'response')
 protein_df_medianCentered = protein_df_medianCentered %>% 
   mutate(filename_new = gsub('\\.mzXML\\.gz', '', run_id))
