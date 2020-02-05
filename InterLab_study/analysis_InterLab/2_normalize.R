@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript --vanilla
 
 #load the libraries
-library(proBatch)
+library(proBatch3.4)
 library(readr)
 library(dplyr)
 library(tidyr)
