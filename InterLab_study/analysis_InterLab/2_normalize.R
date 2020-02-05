@@ -31,7 +31,7 @@ fragmentome_centered = normalize_sample_medians_df(fragmentome,
 fragmentome_centered_un_log = fragmentome_centered %>% 
   unlog_df(measure_col = 'Ion_intensity')
 
-
+print(names(fragmentome_centered_un_log))
 
 
 proteome_median_centered = fragment_df_to_openSWATH(fragmentome_centered_un_log, 
