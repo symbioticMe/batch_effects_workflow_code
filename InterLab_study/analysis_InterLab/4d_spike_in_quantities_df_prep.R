@@ -4,7 +4,7 @@ library(readr)
 library(tidyverse)
 library(reshape2)
 
-spike_ins_in_samples = read_csv('data_InterLab/2_interim_data_InterLab/spike_ins_in_samples.csv')
+spike_ins_in_samples = read_csv('data_InterLab/2_interim_data/spike_ins_in_samples.csv')
 
 #load the data raw (non-normalized) peptide data
 peptide_df_raw = read_csv("data_InterLab/2_interim_data/peptide_df_raw.csv") 
