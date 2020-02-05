@@ -5,6 +5,11 @@ library(ggpubr)
 
 protein_df_raw <- read_csv("data_InterLab/3_data_for_plots/protein_df_raw.csv")
 sample_annotation_InterLab <- read_csv("data_InterLab/3_data_for_plots/sample_annotation_InterLab.csv")
+colors_for_sites = sample_annotation_to_colors(sample_annotation = sample_annotation_InterLab,
+                                               sample_id_col = 'sample_name',
+                                               numeric_columns = NULL,
+                                               factor_columns = c('site'))
+
 
 protein_df_raw = log_transform_df(protein_df_raw, log_base = 10, measure_col = 'response')
 protein_df_raw = protein_df_raw%>% 
