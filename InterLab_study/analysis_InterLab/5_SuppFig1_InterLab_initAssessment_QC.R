@@ -43,7 +43,7 @@ sample_corr_heatmap_normalized = plot_sample_corr_heatmap(norm_proteome_matrix,
                                                plot_title = 'Sample correlation (normalized data)',
                                                show_colnames = F, show_rownames = F)
 #ToDo: extract, which part here comes from helpers?
-source('lib/helpers.R')
+source('../lib/plot_themes.R')
 boxplot_proteins_normalized = plot_boxplot(df_long = protein_df_medianCentered, 
                                            sample_annotation = sample_annotation_InterLab,
                                            sample_id_col = 'filename_new',
