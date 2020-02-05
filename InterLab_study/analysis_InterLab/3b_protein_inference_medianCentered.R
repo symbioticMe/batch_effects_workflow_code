@@ -4,6 +4,8 @@
 library(readr)
 library(aLFQ)
 
+print(sessionInfo())
+print(Sys.time())
 #load the data
 data.median <- import(ms_filenames=  "data_InterLab/2_interim_data/all_sites_global_q_001_applied_to_local_global_medianCentered.tsv",
                       ms_filetype = "openswath", 
@@ -12,6 +14,8 @@ data.median <- import(ms_filenames=  "data_InterLab/2_interim_data/all_sites_glo
                       openswath_superimpose_identifications=FALSE, 
                       openswath_replace_run_id=FALSE,
                       openswath_filtertop=FALSE, openswath_removedecoys=TRUE)
+print('Import complete!')
+print(Sys.time())
 
 #infer the proteins
 prots.median <- ProteinInference(data.median, peptide_method = "top", peptide_topx = 3,
@@ -22,6 +26,8 @@ prots.median <- ProteinInference(data.median, peptide_method = "top", peptide_to
                                  combine_precursors = FALSE, 
                                  consensus_proteins = FALSE, consensus_peptides = FALSE, 
                                  consensus_transitions = FALSE)
+print(Sys.time())
 
 #save the data frame
 write_csv(prots.median, path = 'data_InterLab/3_data_for_plots/protein_df_medianCentered.csv')
+print(Sys.time())
