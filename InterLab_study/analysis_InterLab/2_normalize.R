@@ -31,7 +31,38 @@ fragmentome_centered = normalize_sample_medians_df(fragmentome,
 fragmentome_centered_un_log = fragmentome_centered %>% 
   unlog_df(measure_col = 'Ion_intensity')
 
+
+proteome_median_centered = fragment_df_to_openSWATH(fragmentome_centered_un_log, 
+                                                    sample_id_col = 'filename',
+                                                    peptide_id_col = c('peptide_group_label', 'aggr_Peak_Area', 'aggr_Fragment_Annotation'),
+                                                    fragment_intensity_column = 'Ion_intensity', 
+                                                    fragment_annotation_column = 'Ion_ID',
+                                                    id_column = 'ions',
+                                                    fragment_united_column = 'aggr_Fragment_Annotation_new',
+                                                    fragment_united_int_column = 'aggr_Peak_Area_new',
+                                                    un_log = NULL, 
+                                                    intensities_to_exclude = c('Ion_intensity_log2', 'Ion_intensity', 'Intensity_normalized',
+                                                                               'diff','median_global','median_run'))
+old_names <- c("aggr_Peak_Area", "aggr_Fragment_Annotation", 
+               "aggr_Peak_Area_new", "aggr_Fragment_Annotation_new")
+new_names <-  c("aggr_Peak_Area_old", "aggr_Fragment_Annotation_old", 
+                "aggr_Peak_Area", "aggr_Fragment_Annotation")
+
+supporting_info_cols = c("transition_group_id", "Sequence", "FullPeptideName", "RT", 
+                         "assay_rt", "Intensity", "ProteinName", "m_score", "run_id", 
+                         "peak_group_rank", "Charge", "decoy", 'peptide_group_label','filename')
+cols_to_get <- rep(list(col_guess()), length(supporting_info_cols))
+names(cols_to_get) <- supporting_info_cols
+cols_to_get2 = do.call(cols_only, cols_to_get)
+proteome_supporting_info = read_delim('data_InterLab/1_original_data/all_sites_global_q_0.01_applied_to_local_global.txt',
+                                      delim =  "\t", escape_double = FALSE, trim_ws = TRUE, 
+                                      col_types = cols_to_get2)
+
+proteome_median_centered = proteome_median_centered %>%
+  rename_at(vars(old_names), ~ new_names) %>%
+  merge(proteome_supporting_info, by = c('peptide_group_label','filename'))
+
 #save new data frame
-write_delim(fragmentome_centered_un_log, 
+write_delim(proteome_median_centered, 
             path = "data_InterLab/2_interim_data/all_sites_global_q_001_applied_to_local_global_medianCentered.tsv",
             delim = '\t')
