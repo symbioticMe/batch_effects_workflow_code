@@ -6,3 +6,7 @@
 *.tsv
 *.txt
 *.out
+*.pdf
+*.png
+*.jpg
+*.rds
