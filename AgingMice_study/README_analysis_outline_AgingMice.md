@@ -100,7 +100,7 @@ Thus, the code is organized as follows:
   - `3b_correct_medianCentering.R`
 4) Resource-heavy code used in plots (using the files 
 in `data_AgingMice/3_data_for_plots`, storing the results in `plots_PanCancer/:
-  a. `4a_PVCA_analysis`;
+  a. `4a_PVCA_analysis.R`;
   b. `4b_peptide_correlation_raw.R`;
   c. `4c_peptide_correlation_batchCorrected.R`
 5) Plotting the figures (using the files 
