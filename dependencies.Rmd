@@ -10,9 +10,21 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## Dependencies in the project:
+For Aging Mice data
+```{r R3.6}
+install.packages(c('dplyr','readr','tidyr','stringi','reshape2', 'ggplot2', 'ggpubr', 'ggdendextend'))
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
 
-```{r cars}
-install.packages(c('dplyr','readr','tidyverse','reshape2','aLFQ'))
+BiocManager::install("proBatch")
+```
+
+For R 3.4 (InterLab and PanCancer data)
+```{r R3.4}
+install.packages(c('aLFQ','dplyr','readr','tidyr','stringi','reshape2','devtools'))
+devtools::install_github('symbioticMe/proBatch3.4')
+source("https://bioconductor.org/biocLite.R")
+BiocInstaller::biocLite("MSstats")
 ```
 
 
