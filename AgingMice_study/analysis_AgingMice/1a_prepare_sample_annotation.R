@@ -8,7 +8,7 @@ library(proBatch)
 sample_annotation_original = read_csv("data_AgingMice/1_original_data/sample_annotation_E1891171630.csv")
 
 #prepare annotation: infer sample order, convert date Time columns to PoSIX etc
-sample_annotation_AgingMice = date_to_sample_order(sample_annotation_AgingMice_publication,
+sample_annotation_AgingMice = date_to_sample_order(sample_annotation_original,
                                           time_column = c('RunDate','RunTime'),
                                           new_time_column = 'DateTime',
                                           dateTimeFormat = c("%b_%d", "%H:%M:%S"),
