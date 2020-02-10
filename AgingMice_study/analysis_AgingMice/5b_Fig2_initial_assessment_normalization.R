@@ -133,7 +133,7 @@ fig_1_ext2 = ggarrange(ggarrange(meanplot +
                                  labels =c("D","E"),
                                  common.legend = TRUE, legend = "right"), 
                        nrow = 2)
-ggsave(fig_1_ext2, filename = 'plots_AgingMice/Fig1_initial_assessment.png',
+ggsave(fig_1_ext2, filename = 'plots_AgingMice/Fig2_initial_assessment.png',
        width = 25, height = 11, units = 'cm')
 
 QTL_title <- expression(bold("QTL detection problem in ")~bolditalic("Acads")~bold(" protein"))
@@ -155,7 +155,7 @@ panel_ABC <- ggarrange(meanplot_reps +
                                                     r=.5, b=.5, unit = "cm")), 
                                  ncol = 3,  widths = c(1.5, 1, 1.5),
                                  labels =c("A","B","C"),font.label = list(size=22))
-ggsave(panel_ABC, filename = 'plots_AgingMice/Fig1_ABC_initial_assessment.pdf',
+ggsave(panel_ABC, filename = 'plots_AgingMice/Fig2_ABC_initial_assessment.pdf',
        width = 18, height = 5.5, units = 'in')
 panel_DE_no_legend <- ggarrange(boxplot_raw_Aging_mice + 
                         rremove('legend') +
@@ -170,7 +170,7 @@ panel_DE_no_legend <- ggarrange(boxplot_raw_Aging_mice +
                       ncol = 2, 
                       labels =c("D","E"),font.label = list(size=22),
                       common.legend = TRUE, legend = "none")
-ggsave(panel_DE_no_legend, filename = 'plots_AgingMice/Fig1_DE_initial_assessment.pdf',
+ggsave(panel_DE_no_legend, filename = 'plots_AgingMice/Fig2_DE_initial_assessment.pdf',
        width = 18, height = 6.5, units = 'in')
-ggsave(panel_DE_no_legend, filename = 'plots_AgingMice/Fig1_DE_initial_assessment.png',
+ggsave(panel_DE_no_legend, filename = 'plots_AgingMice/Fig2_DE_initial_assessment.png',
        width = 18, height = 6.5, units = 'in')
