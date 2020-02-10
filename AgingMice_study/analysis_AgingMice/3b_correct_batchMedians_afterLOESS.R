@@ -17,4 +17,4 @@ batchCorrected_df_AgingMice = center_feature_batch_medians_df(loess_fit_75,
 
 # save new data frame
 write_csv(batchCorrected_df_AgingMice, 
-          path = "data_AgingMice/3_data_for_plots/batchCorrected_df_agingMice_no_requants.csv")
+          path = "data_AgingMice/3_data_for_plots/batchCorrected_proteome_AgingMice.csv")

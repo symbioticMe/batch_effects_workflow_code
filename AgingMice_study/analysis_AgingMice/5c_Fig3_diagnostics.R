@@ -114,5 +114,5 @@ fig_2 = ggarrange(panel_A_C +
                     theme(plot.margin = margin(r=1, unit = "cm")), 
                   panel_B_D, ncol = 2, nrow = 1, widths = c(2, 1))
 
-ggsave(fig_2, filename = 'plots_AgingMice/Fig2_diagnostics.pdf',
+ggsave(fig_2, filename = 'plots_AgingMice/Fig3_diagnostics.pdf',
        width = 20, height = 11)
