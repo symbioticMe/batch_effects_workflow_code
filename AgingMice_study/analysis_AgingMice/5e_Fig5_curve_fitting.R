@@ -5,7 +5,7 @@ library(ggplot2)
 
 sample_annotation_AgingMice = read_csv("data_AgingMice/3_data_for_plots/sample_annotation_AgingMice.csv")
 color_list_AgingMice = readRDS("data_AgingMice/3_data_for_plots/color_annotation.rda")
-loess_fit_75_df = read_csv(file = "data_AgingMice/3_data_for_plots/adjusted_fit_75_AgingMice.csv")
+loess_fit_75_df = read_csv(file = "data_AgingMice/3_data_for_plots/adjusted_fit_df_agingMice.csv")
 batchCorrected_df_AgingMice = read_csv(file = "data_AgingMice/3_data_for_plots/batchCorrected_proteome_AgingMice.csv")
 
 
@@ -68,9 +68,5 @@ gg_fit = plot_with_fitting_curve(iRTs_illustrative,
             aes(y = mean, x=order, group = MS_batch, color = MS_batch), size=1.5) + 
   scale_color_manual(values = color_list_AgingMice[['MS_batch']])+
   annotate("segment", x=-Inf, xend=+Inf, y=-Inf, yend=-Inf)
-ggsave(gg_fit, filename = 'plots_AgingMice/Fig3_batch_correction.pdf',
-       width = 12.09, height = 4.4, unit = 'in', device = cairo_pdf)
-
-ggsave(gg_fit + theme(legend.position = "none"), 
-       filename = 'plots_AgingMice/Fig3_correction_noLegend.pdf',
+ggsave(gg_fit, filename = 'plots_AgingMice/Fig5_batch_correction.pdf',
        width = 12.09, height = 4.4, unit = 'in', device = cairo_pdf)
