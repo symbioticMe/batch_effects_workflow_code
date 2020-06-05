@@ -1,5 +1,5 @@
 library(readr)
-library(proBatch3.4)
+library(proBatch)
 library(dplyr)
 library(ggpubr)
 library(ggthemes)

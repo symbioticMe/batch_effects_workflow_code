@@ -5,7 +5,7 @@ library(ggplot2)
 
 sample_annotation_AgingMice = read_csv("data_AgingMice/3_data_for_plots/sample_annotation_AgingMice.csv")
 proteome_df_AgingMice = read_csv("data_AgingMice/2_interim_data/raw_proteome_AgingMice.csv")
-color_list_AgingMice = readRDS("data_AgingMice/2_interim_data/color_annotation.rda")
+color_list_AgingMice = readRDS("data_AgingMice/3_data_for_plots/color_annotation.rda")
 
 batch_col = 'MS_batch'
 
@@ -91,7 +91,7 @@ y_lims_boxplot_raw = layer_scales(boxplot_raw_Aging_mice)$y$range$range
 
 
 #panel D: Boxplots after correction
-normalized_df_AgingMice = read_csv(file = "data_AgingMice/3/normalized_proteome_AgingMice.csv")
+normalized_df_AgingMice = read_csv(file = "data_AgingMice/3_data_for_plots/normalized_proteome_AgingMice.csv")
 boxplot_normalized_Aging_mice <- plot_boxplot(normalized_df_AgingMice, sample_annotation_AgingMice,
                                               sample_id_col = 'FullRunName', measure_col = 'Intensity',
                                               order_col = 'order', batch_col = batch_col, 

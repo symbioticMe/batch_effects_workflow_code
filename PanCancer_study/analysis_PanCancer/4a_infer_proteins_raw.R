@@ -1,7 +1,7 @@
 library(MSstats)
 library(readr)
 library(dplyr)
-library(proBatch3.4)
+library(proBatch)
 
 #load the data
 raw_transitome_unlogged = read_csv('data_PanCancer/2_interim_data/raw_transitome_PanCancer.csv')
@@ -10,7 +10,7 @@ raw_transitome_unlogged = read_csv('data_PanCancer/2_interim_data/raw_transitome
 start.time = Sys.time()
 raw_data_proBatch_MSstats = dataProcess(raw_transitome_unlogged, 
                                         logTrans=2, normalization=FALSE, 
-                                        betweenRunInterferenceScore=FALSE, 
+                                        #betweenRunInterferenceScore=FALSE, 
                                         fillIncompleteRows=TRUE)
 proteome_raw = raw_data_proBatch_MSstats$RunlevelData %>% 
   mutate(sample_name = paste(GROUP_ORIGINAL, SUBJECT_ORIGINAL, sep = '_'))%>%

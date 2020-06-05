@@ -30,4 +30,4 @@ write_csv(peptide_corr_batchCorr, 'plots_AgingMice/interim_data_for_plots/peptid
 Sys.time()
 peptide_corr_plot = plot_peptide_corr_distribution.corrDF(peptide_corr_batchCorr, 
                                plot_title = 'Peptide correlation (corrected data)',
-                               filename = 'Aging_mice/graphs_Aging_mice/6b_peptide_correlation_corrected.pdf')
+                               filename = 'plots_AgingMice/6b_peptide_correlation_corrected.pdf')

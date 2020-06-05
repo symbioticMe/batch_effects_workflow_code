@@ -1,5 +1,5 @@
 library(readr)
-library(proBatch3.4)
+library(proBatch)
 
 
 #load the data

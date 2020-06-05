@@ -1,4 +1,4 @@
-library(proBatch3.4)
+library(proBatch)
 library(readr)
 library(dplyr)
 library(MSstats)
