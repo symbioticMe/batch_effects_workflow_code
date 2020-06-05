@@ -12,3 +12,7 @@
 *.rds
 *.rda
 *.eps*
+PanCancer_study/msstats*.log
+AgingMice_study/data_AgingMice/1_original_data_AgingMice.zip
+InterLab_study/data_InterLab/1_original_data_InterLab.zip
+PanCancer_study/data_PanCancer/1_original_data_PanCancer.zip
