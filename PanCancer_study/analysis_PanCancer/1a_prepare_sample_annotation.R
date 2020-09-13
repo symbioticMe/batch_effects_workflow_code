@@ -27,6 +27,8 @@ sample_annotation_PanCancer = sample_annotation_original %>%
 sample_annotation_PanCancer$patient_ID = sample_annotation_PanCancer %>% group_indices(sample_id_final)
 sample_annotation_PanCancer$patient_ID = paste('patient_', 
                                                 sprintf("%03d", sample_annotation_PanCancer$patient_ID ), sep = '')
+sample_annotation_PanCancer = sample_annotation_PanCancer %>%
+  rename(digestion_batch = Batch)
 
 
 write_csv(sample_annotation_PanCancer, 
