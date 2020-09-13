@@ -5,7 +5,8 @@ library(ggplot2)
 
 sample_annotation_AgingMice = read_csv("data_AgingMice/3_data_for_plots/sample_annotation_AgingMice.csv")
 proteome_df_AgingMice = read_csv("data_AgingMice/2_interim_data/raw_proteome_AgingMice.csv")
-color_list_AgingMice = readRDS("data_AgingMice/2_interim_data/color_annotation.rda")
+normalized_df_AgingMice = read_csv(file = "data_AgingMice/3_data_for_plots/normalized_proteome_AgingMice.csv")
+color_list_AgingMice = readRDS("data_AgingMice/3_data_for_plots/color_annotation.rda")
 
 batch_col = 'MS_batch'
 
@@ -31,15 +32,32 @@ meanplot_reps <- plot_sample_mean(proteome_log_AgingMice,
                                     mutate(EarTag = merge_rare_levels(EarTag, 6)), 
                                   sample_id_col = 'FullRunName', color_by_batch = T,
                                   order_col = 'order', batch_col = 'EarTag',
-                                  plot_title = "Mean Intensity of each sample, Raw Data", 
+                                  plot_title = "Mean Sample Intensity, raw data matrix", 
                                   color_scheme = color_list_AgingMice[['EarTag']], 
-                                  vline_color = NULL)
+                                  vline_color = NULL, base_size = 20)+ylab('Mean Sample Intensity')
 meanplot_reps_with_line = proBatch:::add_vertical_batch_borders('order', 'FullRunName', 'MS_batch', 
                                                                  'red', 
                                                                  NULL, sample_annotation_AgingMice, 
                                                                  meanplot_reps)
 
-#panel B: one of QTL protein peptides;
+#Panel B: correlation of sample in the raw data
+sample_cor_raw  <-calculate_sample_corr_distr(data_matrix = proteome_log_AgingMice, 
+                                              sample_annotation = sample_annotation_AgingMice,
+                                              sample_id_col = 'FullRunName',
+                                              batch_col = 'MS_batch')
+sample_cor_raw  = sample_cor_raw  %>% 
+  mutate(batch_replicate_upd = ifelse(replicate, 'replicates', 
+                                      ifelse(batch_the_same, 'same\nbatch', 'different\nbatches')))
+sample_cor_raw$batch_replicate_upd = factor(sample_cor_raw$batch_replicate_upd,
+                                            levels = c('different\nbatches', 'same\nbatch', 'replicates'))
+plot_sample_corr_raw  <- plot_sample_corr_distribution.corrDF(sample_cor_raw , 
+                                                              plot_param = 'batch_replicate_upd',
+                                                              base_size = 20)+ 
+  theme(axis.title.x = element_blank(), axis.text.x = element_text(angle = 45, vjust = .75, hjust = .75))
+y_lims_corrplot_raw = layer_scales(plot_sample_corr_raw)$y$range$range
+saveRDS(y_lims_corrplot_raw, file = 'plots_AgingMice/interim_data_for_plots/y_lims_corrplot_raw.rds')
+
+#panel C: one of QTL protein peptides;
 Acads_peptide = '9111_LVIAGHLLR_2'
 peptide_df_AgingMice = read_csv("data_AgingMice/1_original_data/peptide_annotation.csv")
 allelle_annotation_df = read_csv('data_AgingMice/3_data_for_plots/allelle_annotation_df.csv')
@@ -77,13 +95,41 @@ saveRDS(y_lims_QTL, 'plots_AgingMice/interim_data_for_plots/QTL_range.rds')
 # best_QTL = best_QTL + theme_publication()
 #best_QTL = readRDS("plots_AgingMice/interim_ggplot_objects_AgingMice/2b_best_QTL_raw_data.rds")
 
-# panel C: Boxplots before correction;
+QTL_title <- expression(bold('Peptide LVIAGHLLR of ' ~ bolditalic("ACADS") ~ bold(" protein")))
+panel_ABC <- egg::ggarrange(addSmallLegend(meanplot_reps_with_line, pointSize = 1.5, textSize = 10, spaceLegend = .2) + 
+                         ylab('Mean Intensity')+
+                           labs(color = "EarTag: ")+
+                         ggtitle('Intensity drift in raw data matrix') +
+                         theme(plot.title = element_text(face = "bold",
+                                                         size = 16, hjust = 0.5))+
+                         theme(plot.margin = margin(t=.5, l=.5, 
+                                                    r=.95, b=.5, unit = "cm")),
+                       plot_sample_corr_raw+
+                         ggtitle('Sample correlation\n\n\n')+
+                         theme(plot.title = element_text(face = "bold",size = 16, hjust = 0.5))+
+                         theme(plot.margin = margin(t=.5, l=.5, 
+                                                    r=.95, b=.95, unit = "cm")), 
+                       addSmallLegend(best_QTL, pointSize = 1.5, textSize = 10, spaceLegend = .2)+
+                         labs(color = "Allele: ")+
+                         ggtitle(QTL_title)+
+                         theme(plot.title = element_text(face = "bold",size = 16, hjust = 0.5))+
+                         theme(plot.margin = margin(t=.5, l=.95, 
+                                                    r=.5, b=.5, unit = "cm")), 
+                       ncol = 3,  widths = c(1.5, 1, 1.5),
+                       labels =c("A","B","C"),
+                       #font.label = list(size=22)) #for ggpubr ggarrange
+                       label.args = list(gp = grid::gpar(fontface = "bold", fontsize = 22)))
+ggsave(panel_ABC, filename = 'plots_AgingMice/Fig2_ABC_initial_assessment_20_egg.pdf',
+       width = 18, height = 6.5, units = 'in', device = cairo_pdf)
+
+
+# panel D: Boxplots before correction;
 boxplot_raw_Aging_mice <- plot_boxplot(proteome_df_AgingMice, sample_annotation_AgingMice,
                                        sample_id_col = 'FullRunName', measure_col = 'Intensity',
                                        order_col = 'order', batch_col = batch_col, 
                                        color_by_batch = T, color_scheme = color_list_AgingMice[[batch_col]],
-                                       plot_title = "Intensity Distribution of raw data",
-                                       outliers = FALSE)
+                                       plot_title = "Intensity Distribution in raw data matrix",
+                                       outliers = FALSE, base_size = 21)
 boxplot_raw_Aging_mice = boxplot_raw_Aging_mice +
   geom_boxplot(fatten = 5000, lwd = .0002, outlier.shape = NA)
   # boxplot_raw_Aging_mice = boxplot_raw_Aging_mice  +  theme_publication()
@@ -91,34 +137,57 @@ y_lims_boxplot_raw = layer_scales(boxplot_raw_Aging_mice)$y$range$range
 
 
 #panel D: Boxplots after correction
-normalized_df_AgingMice = read_csv(file = "data_AgingMice/3/normalized_proteome_AgingMice.csv")
+
 boxplot_normalized_Aging_mice <- plot_boxplot(normalized_df_AgingMice, sample_annotation_AgingMice,
                                               sample_id_col = 'FullRunName', measure_col = 'Intensity',
                                               order_col = 'order', batch_col = batch_col, 
                                               color_by_batch = T, color_scheme = color_list_AgingMice[[batch_col]],
-                                              plot_title = "Intensity Distribution of normalized data",
-                                              outliers = FALSE)
+                                              plot_title = "Intensity Distribution in normalized data matrix",
+                                              outliers = FALSE, base_size = 21)
 boxplot_normalized_Aging_mice = boxplot_normalized_Aging_mice + 
-  geom_boxplot(fatten = 5000, lwd = .0002, outlier.shape = NA)
-
-sample_cor_raw  <-calculate_sample_corr_distr(data_matrix = proteome_log_AgingMice, 
-                                              sample_annotation = sample_annotation_AgingMice,
-                                              sample_id_col = 'FullRunName',
-                                              batch_col = 'MS_batch')
-sample_cor_raw  = sample_cor_raw  %>% 
-  mutate(batch_replicate_upd = ifelse(replicate, 'replicates', 
-                                      ifelse(batch_the_same, 'same batch', 'different batches')))
-sample_cor_raw$batch_replicate_upd = factor(sample_cor_raw$batch_replicate_upd,
-                                            levels = c('different batches', 'same batch', 'replicates'))
-plot_sample_corr_raw  <- plot_sample_corr_distribution.corrDF(sample_cor_raw , 
-                                                              plot_title = 'Sample correlation',
-                                                              plot_param = 'batch_replicate_upd')+ 
-  theme(axis.title.x = element_blank())
-y_lims_corrplot_raw = layer_scales(plot_sample_corr_raw)$y$range$range
-saveRDS(y_lims_corrplot_raw, file = 'plots_AgingMice/interim_data_for_plots/y_lims_corrplot_raw.rds')
+  geom_boxplot(fatten = 5000, lwd = .0002, outlier.shape = NA)+
+  ylim(y_lims_boxplot_raw)
 
 
 
+
+
+
+
+panel_DE_no_legend <- ggarrange(boxplot_raw_Aging_mice + 
+                        rremove('legend') +
+                        theme(plot.title = element_text(face = "bold",size = 21, hjust = 0.5))+
+                        theme(plot.margin = margin(t=.5, l=.5, 
+                                                   r=.5, b=.5, unit = "cm")), 
+                      boxplot_normalized_Aging_mice +
+                        rremove('legend') +
+                        theme(plot.title = element_text(face = "bold",size = 21, hjust = 0.5))+
+                        theme(plot.margin = margin(t=.5, l=.5, 
+                                                   r=.5, b=.5, unit = "cm")), 
+                      ncol = 2, 
+                      labels =c("D","E"),font.label = list(size=22),
+                      common.legend = TRUE, legend = "none")
+
+ggsave(panel_DE_no_legend, filename = 'plots_AgingMice/png_for_plots/Fig2_DE_initial_assessment.png',
+       width = 18, height = 6.5, units = 'in')
+ggsave(panel_DE_no_legend, filename = 'plots_AgingMice/Fig2_DE_initial_assessment.pdf',
+       width = 18/1.5, height = 6.5/1.5, units = 'in', device = cairo_pdf)
+
+
+
+boxplot_image <- readPNG("plots_AgingMice/png_for_plots/Fig2_DE_initial_assessment.png")
+
+p_boxplot <- ggplot() +
+  background_image(boxplot_image)
+
+fig_1_ext1 = ggarrange(panel_ABC,
+                       p_boxplot, 
+                       nrow = 2, heights = c(5.5, 6.5))
+ggsave(fig_1_ext1, filename = 'plots_AgingMice/Fig2_initial_assessment_v1.pdf',
+       width = 18, height = 13, units = 'in', device = cairo_pdf)
+
+ggsave(fig_1_ext1, filename = 'plots_AgingMice/Fig2_initial_assessment_v2.png',
+       width = 18, height = 13, units = 'in')
 
 fig_1_ext2 = ggarrange(ggarrange(meanplot + 
                                    theme(plot.title = element_text(face = "bold",
@@ -135,42 +204,3 @@ fig_1_ext2 = ggarrange(ggarrange(meanplot +
                        nrow = 2)
 ggsave(fig_1_ext2, filename = 'plots_AgingMice/Fig2_initial_assessment.png',
        width = 25, height = 11, units = 'cm')
-
-QTL_title <- expression(bold("QTL detection problem in ")~bolditalic("Acads")~bold(" protein"))
-panel_ABC <- ggarrange(meanplot_reps + 
-                         ylab('Mean Intensity')+
-                         ggtitle('Intensity drift in raw data') +
-                                   theme(plot.title = element_text(face = "bold",
-                                                                   size = 16, hjust = 0.5))+
-                         theme(plot.margin = margin(t=.5, l=.5, 
-                                                    r=.5, b=.5, unit = "cm")),
-                       plot_sample_corr_raw+
-                         theme(axis.title.x = element_text(color = "white"))+
-                         theme(plot.title = element_text(face = "bold",size = 16, hjust = 0.5))+
-                         theme(plot.margin = margin(t=.5, l=.5, 
-                                                    r=.5, b=.5, unit = "cm")), 
-                       best_QTL+ggtitle(QTL_title)+
-                         theme(plot.title = element_text(face = "bold",size = 16, hjust = 0.5))+
-                         theme(plot.margin = margin(t=.5, l=.5, 
-                                                    r=.5, b=.5, unit = "cm")), 
-                                 ncol = 3,  widths = c(1.5, 1, 1.5),
-                                 labels =c("A","B","C"),font.label = list(size=22))
-ggsave(panel_ABC, filename = 'plots_AgingMice/Fig2_ABC_initial_assessment.pdf',
-       width = 18, height = 5.5, units = 'in')
-panel_DE_no_legend <- ggarrange(boxplot_raw_Aging_mice + 
-                        rremove('legend') +
-                        theme(plot.title = element_text(face = "bold",size = 16, hjust = 0.5))+
-                        theme(plot.margin = margin(t=.5, l=.5, 
-                                                   r=.5, b=.5, unit = "cm")), 
-                      boxplot_normalized_Aging_mice +
-                        rremove('legend') +
-                        theme(plot.title = element_text(face = "bold",size = 16, hjust = 0.5))+
-                        theme(plot.margin = margin(t=.5, l=.5, 
-                                                   r=.5, b=.5, unit = "cm")), 
-                      ncol = 2, 
-                      labels =c("D","E"),font.label = list(size=22),
-                      common.legend = TRUE, legend = "none")
-ggsave(panel_DE_no_legend, filename = 'plots_AgingMice/Fig2_DE_initial_assessment.pdf',
-       width = 18, height = 6.5, units = 'in')
-ggsave(panel_DE_no_legend, filename = 'plots_AgingMice/Fig2_DE_initial_assessment.png',
-       width = 18, height = 6.5, units = 'in')
