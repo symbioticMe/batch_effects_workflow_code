@@ -4,9 +4,9 @@ library(proBatch)
 
 # load the data
 sample_annotation_AgingMice = read_csv("data_AgingMice/3_data_for_plots/sample_annotation_AgingMice.csv")
-loess_fit_75 = read_csv("data_AgingMice/3_data_for_plots/adjusted_fit_df_agingMice.csv")
+loess_fit_75_df = read_csv("data_AgingMice/3_data_for_plots/adjusted_fit_df_agingMice.csv")
 
-batchCorrected_df_AgingMice = center_feature_batch_medians_df(loess_fit_75, 
+batchCorrected_df_AgingMice = center_feature_batch_medians_df(loess_fit_75_df, 
                                                               sample_annotation_AgingMice, 
                                                               batch_col = 'MS_batch',  
                                                               feature_id_col = 'peptide_group_label', 
