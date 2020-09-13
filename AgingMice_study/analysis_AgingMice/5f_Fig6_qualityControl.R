@@ -14,7 +14,7 @@ color_list_AgingMice = readRDS("data_AgingMice/3_data_for_plots/color_annotation
 peptide_df_AgingMice = read_csv("data_AgingMice/1_original_data/peptide_annotation.csv")
 
 raw_proteome = read_csv("data_AgingMice/2_interim_data/raw_proteome_AgingMice.csv")
-batchCorrected_proteome  = read_csv("data_AgingMice/3_data_for_plots/batchCorrected_proteome_AgingMice.csv")
+batchCorrected_df_AgingMice  = read_csv("data_AgingMice/3_data_for_plots/batchCorrected_proteome_AgingMice.csv")
 
 #Panel A: Corrected QTL:
 allelle_annotation_df = read_csv('data_AgingMice/3_data_for_plots/allelle_annotation_df.csv')
@@ -29,10 +29,10 @@ annotation_df = sample_annotation_AgingMice %>%
   merge(allelle_annotation_df, by = 'Strain')%>%
   merge(peptide_df_AgingMice, by = 'Gene') 
 
-QTL_data_batchCorr = batchCorrected_proteome %>%
+QTL_data_batchCorr = batchCorrected_df_AgingMice %>%
   filter(peptide_group_label == Acads_peptide_3) %>%
   merge(annotation_df, 
-        by = intersect(names(batchCorrected_proteome), names(annotation_df)),
+        by = intersect(names(batchCorrected_df_AgingMice), names(annotation_df)),
         all.x = T)
 #df has columns: Gene, Stain, locus (Blue, Red, heterozygous)
 colors_for_alleles = c(RColorBrewer::brewer.pal(3, 'Set1')[1:2], 'grey')
@@ -43,14 +43,14 @@ best_QTL_batchCorr_3 = plot_single_feature(Acads_peptide_3,
                                            sample_annotation = sample_annotation_AgingMice,
                                            geom = 'point',
                                            vline_color = 'grey', 
-                                           plot_title = plot_title_batchCorr_3) 
-best_QTL_batchCorr_3 = best_QTL_batchCorr_3 + 
+                                           plot_title = plot_title_batchCorr_3, base_size = 16) 
+best_QTL_batchCorr_3_1 = best_QTL_batchCorr_3 + 
   geom_point(data = QTL_data_batchCorr %>% filter(peptide_group_label == Acads_peptide_3), 
              aes(color = allele, x = order, y = Intensity)) + 
   scale_color_manual(values = colors_for_alleles, breaks = names(colors_for_alleles))
 
 y_lims_QTL = readRDS('plots_AgingMice/interim_data_for_plots/QTL_range.rds')
-best_QTL_batchCorr_3_scaledRaw = best_QTL_batchCorr_3+
+best_QTL_batchCorr_3_scaledRaw = best_QTL_batchCorr_3_1+
   ylim(c(y_lims_QTL))+ 
   theme(legend.position="top")
 
@@ -60,13 +60,13 @@ best_QTL_batchCorr_3_scaledRaw = best_QTL_batchCorr_3+
 #  transform proteome df into matrix 
 proteome_log_AgingMice = long_to_matrix(raw_proteome, feature_id_col = 'peptide_group_label',
                                         measure_col = 'Intensity', sample_id_col = 'FullRunName')
-batchCorrected_matrix_AgingMice = long_to_matrix(batchCorrected_proteome, 
+batchCorrected_matrix_AgingMice = long_to_matrix(batchCorrected_df_AgingMice, 
                                                  feature_id_col = 'peptide_group_label',
                                                  measure_col = 'Intensity', 
                                                  sample_id_col = 'FullRunName',
                                                  qual_col = NULL)
 rm(raw_proteome)
-rm(batchCorrected_proteome)
+rm(batchCorrected_df_AgingMice)
 #Panel B: Sample correlation
 
 
@@ -74,33 +74,39 @@ sample_cor_batchCor <-calculate_sample_corr_distr(data_matrix = batchCorrected_m
                                                   sample_annotation = sample_annotation_AgingMice,
                                                   sample_id_col = 'FullRunName',
                                                   batch_col = 'MS_batch')
-sample_cor_batchCor  = sample_cor_batchCor  %>% 
+sample_cor_batchCor  = sample_cor_batchCor  %>%
   mutate(batch_replicate_upd = ifelse(replicate, 'replicates', 
-                                      ifelse(batch_the_same, 'same batch', 'different batches')))
+                                    ifelse(batch_the_same, 'same\nbatch', 'different\nbatches')))
 sample_cor_batchCor$batch_replicate_upd = factor(sample_cor_batchCor$batch_replicate_upd,
-                                            levels = c('different batches', 'same batch', 'replicates'))
+                                                 levels = c('different\nbatches', 'same\nbatch', 'replicates'))
 sample_cor_batchCor$Step = 'After correction'
+
+y_lims_corrplot_raw = readRDS(file = 'plots_AgingMice/interim_data_for_plots/y_lims_corrplot_raw.rds')
 corr_distr <- plot_sample_corr_distribution.corrDF(sample_cor_batchCor, 
                                                    plot_title = NULL,
                                                    # plot_title = 'Selected sample correlation distribution',
-                                                   plot_param = 'batch_replicate_upd')+ 
+                                                   plot_param = 'batch_replicate_upd',
+                                                   base_size = 16)+ 
   annotate("segment", x=-Inf, xend=-Inf, y=-Inf, yend=Inf, size = 1.2)+
   theme(axis.title.x = element_blank(),
-        strip.text = element_text(face = 'bold', size = 14),
+        strip.text = element_text(face = 'bold', size = 16),
         strip.background=element_rect(color = NA,  fill=NA),
         panel.spacing = unit(2, "lines"),
         axis.text.x = element_text(angle = 45,hjust=1, size = 10),
         plot.margin = margin(t=.5, l=0, 
-                             r=0, b=1, unit = "cm"))
+                             r=0, b=1, unit = "cm"))+
+  ylim(c(y_lims_corrplot_raw[1],1))
 
-panel_top2 = ggarrange(best_QTL_batchCorr_3_scaledRaw+
+panel_top2 = egg::ggarrange(best_QTL_batchCorr_3_scaledRaw+
                          ggtitle(NULL)+
-                         theme(plot.margin = margin(t = 1, l =.5, r=.5,
-                                                    b=2, unit = "cm")), 
-                       corr_distr, 
+                         theme(plot.margin = margin(t = .21, l =.5, r=1.5,
+                                                    b=1.2, unit = "cm")), 
+                       corr_distr+
+                         theme(plot.margin = margin(t=.21,l=1, r = 1.2, unit = "cm")), 
                       ncol = 2, nrow = 1, widths = c(2, 1), 
                       labels = c('A','B'),
-                      font.label = list(size=22))
+                      #font.label = list(size=22)) #for ggpubr ggarrange
+                      label.args = list(gp = grid::gpar(fontface = "bold", fontsize = 22)))
 
 #panel C: peptide correlation heatmap
 peptide_count = rowSums(!is.na(proteome_log_AgingMice))
@@ -142,12 +148,15 @@ prot_corr_heatmap <- ggarrange(ggarrange(protein_corrplot_plot_raw$gtable)+
                                   face = "bold", size = 14))
 
 #TODO: re-plot after the calculation on Euler is complete:
-PostScriptTrace("plots_AgingMice/png_for_plots/test_peptide_correlation.eps")
-peptide_correlation <- readPicture('test_peptide_correlation.eps.xml')
-peptides_corr_grid = pictureGrob(peptide_correlation)
+peptide_correlation <- readPNG("plots_AgingMice/png_for_plots/6d_peptide_correlation.png")
+
+p_pep_corr <- ggplot() +
+  background_image(peptide_correlation) +
+  # This ensures that the image leaves some space at the edges
+  theme(plot.margin = margin(t=1, l=1, r=1, b=1, unit = "cm"))
 
 
-panel_bottom = ggarrange(prot_corr_heatmap, peptides_corr_grid,  
+panel_bottom = ggarrange(prot_corr_heatmap, p_pep_corr,  
                          ncol = 2, nrow = 1, widths = c(2, 1), 
                          labels = c('C','D'),
                          font.label = list(size=22))
@@ -158,6 +167,6 @@ gg_Fig4_2 = ggarrange(panel_top2,
                     ncol = 1, nrow = 2,
                     heights = c(1,1))
 ggsave(gg_Fig4_2, 
-       filename = 'plots_AgingMice/Fig6_quality_control.pdf', 
+       filename = 'plots_AgingMice/Fig6_quality_control1.pdf', 
        dev = cairo_pdf, width = 10.95, height = 7.92)
 
