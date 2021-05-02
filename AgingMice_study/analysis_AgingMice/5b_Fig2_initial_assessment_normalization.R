@@ -2,6 +2,7 @@ library(tidyverse)
 library(proBatch)
 library(ggpubr)
 library(ggplot2)
+library(png)
 
 sample_annotation_AgingMice = read_csv("data_AgingMice/3_data_for_plots/sample_annotation_AgingMice.csv")
 proteome_df_AgingMice = read_csv("data_AgingMice/2_interim_data/raw_proteome_AgingMice.csv")
@@ -10,7 +11,7 @@ color_list_AgingMice = readRDS("data_AgingMice/3_data_for_plots/color_annotation
 
 batch_col = 'MS_batch'
 
-#source('lib/helpers.R')
+source('../lib/helpers.R')
 #panel A: meanplot
 #  transform proteome df into matrix 
 proteome_log_AgingMice = long_to_matrix(proteome_df_AgingMice, feature_id_col = 'peptide_group_label',
@@ -21,7 +22,6 @@ meanplot <- plot_sample_mean(proteome_log_AgingMice, sample_annotation_AgingMice
                              plot_title = "Meanplot of Raw Data Matrix", 
                              color_scheme = color_list_AgingMice[[batch_col]])
 meanplot = meanplot + 
-  #theme_publication()+
   geom_point(size = -1, aes_string(fill = batch_col)) + 
   scale_fill_manual(values = color_list_AgingMice[[batch_col]])+
   guides(fill = guide_legend(nrow = 2, 
@@ -34,7 +34,8 @@ meanplot_reps <- plot_sample_mean(proteome_log_AgingMice,
                                   order_col = 'order', batch_col = 'EarTag',
                                   plot_title = "Mean Sample Intensity, raw data matrix", 
                                   color_scheme = color_list_AgingMice[['EarTag']], 
-                                  vline_color = NULL, base_size = 20)+ylab('Mean Sample Intensity')
+                                  vline_color = NULL, base_size = 20) +
+  ylab('Mean Sample Intensity (log2 scale)')
 meanplot_reps_with_line = proBatch:::add_vertical_batch_borders('order', 'FullRunName', 'MS_batch', 
                                                                  'red', 
                                                                  NULL, sample_annotation_AgingMice, 
@@ -88,16 +89,15 @@ best_QTL = plot_single_feature(Acads_peptide,
 best_QTL = best_QTL + 
   geom_point(data = QTL_data1 %>% filter(peptide_group_label == Acads_peptide), 
              aes(color = allele, x = order, y = Intensity))+ 
-  scale_color_manual(values = colors_for_alleles, breaks = names(colors_for_alleles))
+  scale_color_manual(values = colors_for_alleles, breaks = names(colors_for_alleles)) +
+  ylab('Intensity (log2 scale)')
 best_QTL = best_QTL + theme(legend.position="top")
 y_lims_QTL = layer_scales(best_QTL)$y$range$range
 saveRDS(y_lims_QTL, 'plots_AgingMice/interim_data_for_plots/QTL_range.rds')
-# best_QTL = best_QTL + theme_publication()
-#best_QTL = readRDS("plots_AgingMice/interim_ggplot_objects_AgingMice/2b_best_QTL_raw_data.rds")
 
 QTL_title <- expression(bold('Peptide LVIAGHLLR of ' ~ bolditalic("ACADS") ~ bold(" protein")))
 panel_ABC <- egg::ggarrange(addSmallLegend(meanplot_reps_with_line, pointSize = 1.5, textSize = 10, spaceLegend = .2) + 
-                         ylab('Mean Intensity')+
+                         #ylab('Mean Intensity (log2 scale)')+
                            labs(color = "EarTag: ")+
                          ggtitle('Intensity drift in raw data matrix') +
                          theme(plot.title = element_text(face = "bold",
@@ -131,21 +131,23 @@ boxplot_raw_Aging_mice <- plot_boxplot(proteome_df_AgingMice, sample_annotation_
                                        plot_title = "Intensity Distribution in raw data matrix",
                                        outliers = FALSE, base_size = 21)
 boxplot_raw_Aging_mice = boxplot_raw_Aging_mice +
+  ylab('Intensity (log2 scale)')+ 
+  #outliers disabled conciously, as due to high number of points visualization is too memory-intensive
   geom_boxplot(fatten = 5000, lwd = .0002, outlier.shape = NA)
-  # boxplot_raw_Aging_mice = boxplot_raw_Aging_mice  +  theme_publication()
 y_lims_boxplot_raw = layer_scales(boxplot_raw_Aging_mice)$y$range$range
 
 
 #panel D: Boxplots after correction
-
 boxplot_normalized_Aging_mice <- plot_boxplot(normalized_df_AgingMice, sample_annotation_AgingMice,
                                               sample_id_col = 'FullRunName', measure_col = 'Intensity',
                                               order_col = 'order', batch_col = batch_col, 
                                               color_by_batch = T, color_scheme = color_list_AgingMice[[batch_col]],
                                               plot_title = "Intensity Distribution in normalized data matrix",
                                               outliers = FALSE, base_size = 21)
-boxplot_normalized_Aging_mice = boxplot_normalized_Aging_mice + 
-  geom_boxplot(fatten = 5000, lwd = .0002, outlier.shape = NA)+
+boxplot_normalized_Aging_mice = boxplot_normalized_Aging_mice +
+  ylab('Intensity (log2 scale)') + 
+  #outliers disabled conciously, as due to high number of points visualization is too memory-intensive
+  geom_boxplot(fatten = 5000, lwd = .0002, outlier.shape = NA)+ 
   ylim(y_lims_boxplot_raw)
 
 
@@ -183,24 +185,9 @@ p_boxplot <- ggplot() +
 fig_1_ext1 = ggarrange(panel_ABC,
                        p_boxplot, 
                        nrow = 2, heights = c(5.5, 6.5))
-ggsave(fig_1_ext1, filename = 'plots_AgingMice/Fig2_initial_assessment_v1.pdf',
+ggsave(fig_1_ext1, filename = 'plots_AgingMice/Fig2_initial_assessment_v2.pdf',
        width = 18, height = 13, units = 'in', device = cairo_pdf)
 
 ggsave(fig_1_ext1, filename = 'plots_AgingMice/Fig2_initial_assessment_v2.png',
        width = 18, height = 13, units = 'in')
 
-fig_1_ext2 = ggarrange(ggarrange(meanplot + 
-                                   theme(plot.title = element_text(face = "bold",
-                                                                   size = 16, hjust = 0.5)), 
-                                 best_QTL,
-                                 plot_sample_corr_raw+
-                                   theme(axis.title.x = element_text(color = "white")), 
-                                 ncol = 3,  widths = c(2, 2, 1),
-                                 labels =c("A","B","C")),
-                       ggarrange(boxplot_raw_Aging_mice, boxplot_normalized_Aging_mice, 
-                                 ncol = 2, 
-                                 labels =c("D","E"),
-                                 common.legend = TRUE, legend = "right"), 
-                       nrow = 2)
-ggsave(fig_1_ext2, filename = 'plots_AgingMice/Fig2_initial_assessment.png',
-       width = 25, height = 11, units = 'cm')

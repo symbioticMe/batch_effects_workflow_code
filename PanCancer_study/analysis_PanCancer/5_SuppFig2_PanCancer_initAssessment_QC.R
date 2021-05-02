@@ -155,15 +155,15 @@ panel_replicates = ggarrange(gg_norm, gg_corrected, labels = c('G','H'))
 #===== Join all the plots together in one plot:
 
 
-figure_supp_Tatjana_with_boxplots = ggarrange(panel_boxplots,
+figure_supp_PanCancer = ggarrange(panel_boxplots,
                                               panel_heatmaps,
                                          panel_proteins, 
                                          panel_replicates, 
                                          nrow = 4, ncol = 1, 
                                          heights = c(0.95, 2, 0.75, 1))
 
-ggsave(figure_supp_Tatjana_with_boxplots, filename = 'plots_PanCancer/Supp_Fig2_PanCancer.png',
+ggsave(figure_supp_PanCancer, filename = 'plots_PanCancer/Supp_Fig2_PanCancer.png',
        width = 15, height = 18, units = 'in', device = 'png')
-ggsave(figure_supp_Tatjana_with_boxplots, filename = 'plots_PanCancer/Supp_Fig2_PanCancer.pdf',
+ggsave(figure_supp_PanCancer, filename = 'plots_PanCancer/Supp_Fig2_PanCancer.pdf',
        width = 15, height = 18, units = 'in', device = cairo_pdf)
 

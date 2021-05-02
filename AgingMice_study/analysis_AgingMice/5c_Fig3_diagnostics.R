@@ -87,12 +87,14 @@ p_iRT_1 = plot_single_feature(iRTs_illustrative[1], df_long =  normalized_df_Agi
                                             sample_annotation = sample_annotation_AgingMice,
                                             batch_col = "MS_batch",
                               facet_col = 'peptide_group_label',
-                            plot_title = 'Representative peptides with batch-specific bias')
+                            plot_title = 'Representative peptides with batch-specific bias') +
+  ylab('Intensity\n(log2 scale)')
 p_iRT_2 = plot_single_feature(iRTs_illustrative[2], df_long =  normalized_df_AgingMice %>%
                                 mutate(Step = 'normalized'), 
                               sample_annotation = sample_annotation_AgingMice,
                               batch_col = "MS_batch", 
-                              facet_col = 'peptide_group_label')
+                              facet_col = 'peptide_group_label') +
+  ylab('Intensity\n(log2 scale)')
 p_iRT = ggarrange(p_iRT_1+ 
                     rremove('xlab')+
                     theme(plot.title = element_text(face = "bold",
@@ -131,6 +133,6 @@ fig_2 = ggarrange(panel_A_C +
                     theme(plot.margin = margin(r=1, unit = "cm")), 
                   panel_B_D, ncol = 2, nrow = 1, widths = c(2, 1))
 
-ggsave(fig_2, filename = 'plots_AgingMice/Fig3_diagnostics1.pdf',
+ggsave(fig_2, filename = 'plots_AgingMice/Fig3_diagnostics_v2.pdf',
        width = 20, height = 11)
 

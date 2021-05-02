@@ -50,7 +50,8 @@ best_QTL_batchCorr_3_1 = best_QTL_batchCorr_3 +
   scale_color_manual(values = colors_for_alleles, breaks = names(colors_for_alleles))
 
 y_lims_QTL = readRDS('plots_AgingMice/interim_data_for_plots/QTL_range.rds')
-best_QTL_batchCorr_3_scaledRaw = best_QTL_batchCorr_3_1+
+best_QTL_batchCorr_3_scaledRaw = best_QTL_batchCorr_3_1 +
+  ylab('Intensity\n(log2 scale)')+
   ylim(c(y_lims_QTL))+ 
   theme(legend.position="top")
 
@@ -167,6 +168,6 @@ gg_Fig4_2 = ggarrange(panel_top2,
                     ncol = 1, nrow = 2,
                     heights = c(1,1))
 ggsave(gg_Fig4_2, 
-       filename = 'plots_AgingMice/Fig6_quality_control1.pdf', 
+       filename = 'plots_AgingMice/Fig6_quality_control_v2.pdf', 
        dev = cairo_pdf, width = 10.95, height = 7.92)
 

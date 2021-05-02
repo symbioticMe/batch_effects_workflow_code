@@ -4,6 +4,7 @@ library(proBatch)
 library(reshape2)
 library(ggplot2)
 library(ggpubr)
+library(dplyr)  # Load "%>%"
 
 sample_annotation_AgingMice = read_csv("data_AgingMice/3_data_for_plots/sample_annotation_AgingMice.csv")
 color_list_AgingMice = readRDS("data_AgingMice/3_data_for_plots/color_annotation.rda")
@@ -98,7 +99,8 @@ gg_fit_A_up = plot_with_fitting_curve(up_peptide,
         strip.background.y = element_blank(),
         legend.position = 'none',
         axis.title.x = element_blank())+
-  ylim(y_axis_fit_up)
+  ylim(y_axis_fit_up) +
+  ylab('Intensity\n(log2 scale)')
 gg_fit_A_down = plot_with_fitting_curve(down_peptide, 
                                       df_long = illustrative_df %>% 
                                         filter(Step == 'Normalized, with LOESS fit'),
@@ -113,7 +115,8 @@ gg_fit_A_down = plot_with_fitting_curve(down_peptide,
   theme(strip.background.x= element_blank(),
         strip.text.x = element_blank() ,
         legend.position = 'none')+
-  ylim(y_axis_fit_down)
+  ylim(y_axis_fit_down) +
+  ylab('Intensity\n(log2 scale)')
 gg_fit_A = ggarrange(gg_fit_A_up, gg_fit_A_down, nrow = 2)
 
 
@@ -219,6 +222,6 @@ gg_total1 = ggarrange(gg_total,
                         theme(plot.margin = margin(t=1, l=1.5, 
                                                    r=2, b=1, unit = "cm")), 
                       widths = c(8, 1))
-ggsave(gg_total1, filename = 'plots_AgingMice/Fig5_batch_correction1.pdf',
+ggsave(gg_total1, filename = 'plots_AgingMice/Fig5_batch_correction_v2.pdf',
        width = 15.09, height = 5.4, unit = 'in', device = cairo_pdf)
 

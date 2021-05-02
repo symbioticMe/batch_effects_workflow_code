@@ -20,8 +20,8 @@ For more details on the analysis and structure of respective folder, we recommen
 The structure of this code and the folder are inspired by fSVA manuscript code [4] and 
 `ProjectTemplate` R package [5].
 
-1. Reference to InterLab study;
-2. Reference to PanCancer study;
+1. Collins BC, Hunter CL, Liu Y, et al. Multi-laboratory assessment of reproducibility, qualitative and quantitative performance of SWATH-mass spectrometry. Nat Commun. 2017;8(1):291. Published 2017 Aug 21. doi:10.1038/s41467-017-00249-5
+2. Sajic T, Liu Y, Arvaniti E, et al. Similarities and Differences of Blood N-Glycoproteins in Five Solid Carcinomas at Localized Clinical Stage Analyzed by SWATH-MS. Cell Rep. 2018;23(9):2819‐2831.e5. doi:10.1016/j.celrep.2018.04.114
 3. Reference to Aging Mice study (if available);
 4. Reference to PVCA/ Jeff Leek SVA code and paper;
 5. ProjectTemplate URL.

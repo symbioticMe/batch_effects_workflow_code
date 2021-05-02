@@ -24,3 +24,4 @@
 *.eps*
 *.svg
 .Rproj.user
+PanCancer_study/msstats*.log
