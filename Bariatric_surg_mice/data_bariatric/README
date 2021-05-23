@@ -1,0 +1,12 @@
+Files for ProBatch:
+
+- meta.csv: These are biological (animal, time, condition) and technical (plate_row, plate_col, ms_order (given as YYMM_SEQ)) meta-data
+- pep_mtx_raw.csv: There are the raw label free quantification values in log10. 0 have been replaced with Nans. Areas for multiple instances of the same peptide have been summed.
+
+
+Other files:
+
+- 20210413_Progenesis_grouped-conditions_peptide-output.csv: This is original, data matrix from which pep_mtx_raw.csv was generated.
+- sample_annotation.xlsx: sample metadata
+- Experimental_ procedure_lymph sample_cohort.docx: Study protocol
+- Bariatric.html: My jupyter notebook with the preliminary analysis.
